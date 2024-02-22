@@ -22,7 +22,7 @@ async def start(message: Message):
 async def echo(message: Message):
     req = {
         "message": message.text,
-        "contactId": message.from_user.id
+        "contactId": message.from_user.username
     }
     res = requests.post('https://jasik.alwaysdata.net/mirasaitg', json=req).json()
 
