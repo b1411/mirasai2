@@ -33,10 +33,10 @@ async def echo(message: Message):
 
 
 @dp.message(Command("end"))
-def end(message: Message):
+async def end(message: Message):
     res = requests.post('https://jasik.alwaysdata.net/clear-ig-session',
                         json={"contactId": message.from_user.username})
-    message.answer("Ваша сессия прервана, пожалуйста начните сначала")
+    await message.answer("Ваша сессия прервана, пожалуйста начните сначала")
 
 
 async def main():
