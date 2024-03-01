@@ -42,7 +42,7 @@ async def echo(message: Message):
     await message.answer(res['message'])
 
 
-@dp.message(prefix="/", commands=['end'])
+@dp.message(prefix='/', command="end")
 def end(message: Message):
     res = requests.post('https://jasik.alwaysdata.net/clear-ig-session',
                         json={"contactId": message.from_user.username}).json()
