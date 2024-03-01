@@ -3,6 +3,7 @@ import requests
 import logging
 import json
 import sys
+import time
 
 from aiogram import Bot, Dispatcher, Router, types
 from aiogram.enums import ParseMode
@@ -20,13 +21,32 @@ async def start(message: Message):
 
 @dp.message()
 async def echo(message: Message):
+    global last_message_time
+    current_time = time.time()
+    if current_time - last_message_time >= 3600:
+        res = requests.post('https://jasik.alwaysdata.net/clear-ig-session',
+                            json={"contactId": message.from_user.username}).json()
+        await message.answer("Ваша сессия прервана, пожалуйста начните сначала")
+        last_message_time = current_time
+        return
+
     req = {
         "message": message.text,
         "contactId": message.from_user.username
     }
-    res = requests.post('https://jasik.alwaysdata.net/mirasaitg', json=req).json()
+    res = requests.post(
+        'https://jasik.alwaysdata.net/mirasaitg', json=req).json()
+
+    last_message_time = current_time
 
     await message.answer(res['message'])
+
+
+@dp.message(prefix="/", commands=['end'])
+def end(message: Message):
+    res = requests.post('https://jasik.alwaysdata.net/clear-ig-session',
+                        json={"contactId": message.from_user.username}).json()
+    message.answer("Ваша сессия прервана, пожалуйста начните сначала")
 
 
 async def main():
