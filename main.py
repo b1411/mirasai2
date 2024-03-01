@@ -7,7 +7,7 @@ import time
 
 from aiogram import Bot, Dispatcher, Router, types
 from aiogram.enums import ParseMode
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 from aiogram.utils.markdown import hbold
 
@@ -42,7 +42,7 @@ async def echo(message: Message):
     await message.answer(res['message'])
 
 
-@dp.message(prefix='/', command="end")
+@dp.message(Command("end"))
 def end(message: Message):
     res = requests.post('https://jasik.alwaysdata.net/clear-ig-session',
                         json={"contactId": message.from_user.username}).json()
