@@ -12,8 +12,6 @@ from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 from aiogram.utils.markdown import hbold
 
-r = redis.Redis('services-jasik.alwaysdata.net', port=8300, db=0)
-
 dp = Dispatcher()
 
 
@@ -37,11 +35,8 @@ async def echo(message: Message):
         "contactId": message.from_user.username
     }
 
-    if r.get(req['contactId']) == None:
-        r.set(req['contactId'], json.dumps(req))
-
     res = requests.post(
-        'https://jasik.alwaysdata.net/mirasaitg', data=r.get(req['contactId'])).json()
+        'https://jasik.alwaysdata.net/mirasaitg', json=req).json()
 
     await message.answer(res['message'])
 
