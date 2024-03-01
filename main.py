@@ -18,20 +18,6 @@ dp = Dispatcher()
 async def start(message: Message):
     await message.answer("Привет я MIRAS AI")
 
-
-@dp.message()
-async def echo(message: Message):
-
-    req = {
-        "message": message.text,
-        "contactId": message.from_user.username
-    }
-    res = requests.post(
-        'https://jasik.alwaysdata.net/mirasaitg', json=req).json()
-
-    await message.answer(res['message'])
-
-
 @dp.message(Command("end"))
 def end(message: Message):
     res = requests.post('https://jasik.alwaysdata.net/clear-ig-session',
@@ -46,6 +32,18 @@ async def main():
     bot = Bot(token="7156102554:AAF-37RMlJjv_EGPVJrt8OPxo13ZLvXCFFM",
               parse_mode=ParseMode.HTML)
     await dp.start_polling(bot)
+
+@dp.message()
+async def echo(message: Message):
+
+    req = {
+        "message": message.text,
+        "contactId": message.from_user.username
+    }
+    res = requests.post(
+        'https://jasik.alwaysdata.net/mirasaitg', json=req).json()
+
+    await message.answer(res['message'])
 
 
 if __name__ == '__main__':
