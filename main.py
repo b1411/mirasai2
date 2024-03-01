@@ -18,20 +18,6 @@ dp = Dispatcher()
 async def start(message: Message):
     await message.answer("Привет я MIRAS AI")
 
-@dp.message(Command("end"))
-def end(message: Message):
-    res = requests.post('https://jasik.alwaysdata.net/clear-ig-session',
-                        json={"contactId": message.from_user.username})
-    if res.status_code == 200:
-        message.answer("Ваша сессия прервана, пожалуйста начните сначала")
-    else:
-        message.answer("Ошибка")
-
-
-async def main():
-    bot = Bot(token="7156102554:AAF-37RMlJjv_EGPVJrt8OPxo13ZLvXCFFM",
-              parse_mode=ParseMode.HTML)
-    await dp.start_polling(bot)
 
 @dp.message()
 async def echo(message: Message):
@@ -44,6 +30,22 @@ async def echo(message: Message):
         'https://jasik.alwaysdata.net/mirasaitg', json=req).json()
 
     await message.answer(res['message'])
+
+
+@dp.message(Command("end"))
+def end(message: Message):
+    res = requests.post('https://jasik.alwaysdata.net/clear-ig-session',
+                        json={"contactId": message.from_user.username}).json()
+    if res['status'] == 200:
+        message.answer("Ваша сессия прервана, пожалуйста начните сначала")
+    else: 
+        message.answer("Ошибка")
+
+
+async def main():
+    bot = Bot(token="7156102554:AAF-37RMlJjv_EGPVJrt8OPxo13ZLvXCFFM",
+              parse_mode=ParseMode.HTML)
+    await dp.start_polling(bot)
 
 
 if __name__ == '__main__':
