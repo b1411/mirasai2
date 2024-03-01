@@ -5,11 +5,14 @@ import json
 import sys
 import time
 
+import redis
 from aiogram import Bot, Dispatcher, Router, types
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
 from aiogram.utils.markdown import hbold
+
+r = redis.Redis('services-jasik.alwaysdata.net', port=8300, db=0)
 
 dp = Dispatcher()
 
@@ -18,11 +21,13 @@ dp = Dispatcher()
 async def start(message: Message):
     await message.answer("Привет я MIRAS AI")
 
+
 @dp.message(Command("end"))
 async def end(message: Message):
     res = requests.post('https://jasik.alwaysdata.net/clear-ig-session',
                         json={"contactId": message.from_user.username})
     await message.answer("Ваша сессия прервана, пожалуйста начните сначала")
+
 
 @dp.message()
 async def echo(message: Message):
@@ -31,8 +36,12 @@ async def echo(message: Message):
         "message": message.text,
         "contactId": message.from_user.username
     }
+
+    if r.get(req['contactId']) == None:
+        r.set(req['contactId'], json.dumps(req))
+
     res = requests.post(
-        'https://jasik.alwaysdata.net/mirasaitg', json=req).json()
+        'https://jasik.alwaysdata.net/mirasaitg', data=r.get(req['contactId'])).json()
 
     await message.answer(res['message'])
 
