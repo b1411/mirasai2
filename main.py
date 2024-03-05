@@ -24,7 +24,13 @@ async def start(message: Message):
 async def end(message: Message):
     res = requests.post('https://jasik.alwaysdata.net/clear-ig-session',
                         json={"contactId": message.from_user.username})
-    await message.answer("Ваша сессия прервана, пожалуйста начните сначала")
+    
+    if res.status_code == 200:
+        await message.answer("Ваша сессия прервана, пожалуйста начните сначала")
+
+    else: 
+        await message.answer("Что-то пошло не так")
+    
 
 
 @dp.message()
@@ -35,10 +41,16 @@ async def echo(message: Message):
         "contactId": message.from_user.username
     }
 
-    res = requests.post(
-        'https://jasik.alwaysdata.net/mirasaitg', json=req).json()
+    try:
+        res = requests.post(
+        'https://jasik.alwaysdata.net/mirasaitg', json=req)
+    
+        data = res.json()
 
-    await message.answer(res['message'])
+        await message.answer(data['message'])
+
+    except Exception as e:
+        await message.answer("Что-то пошло не так")
 
 
 async def main():
@@ -48,5 +60,5 @@ async def main():
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
     asyncio.run(main())
