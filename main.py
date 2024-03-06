@@ -38,7 +38,7 @@ async def echo(message: Message):
 
     req = {
         "message": message.text,
-        "contactId": message.from_user.id
+        "contactId": message.from_user.id or message.from_user.username
     }
 
     try:
