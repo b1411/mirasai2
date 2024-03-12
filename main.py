@@ -50,6 +50,7 @@ async def echo(message: Message):
         await message.answer(data['message'])
 
     except Exception as e:
+        logging.error(e)
         await message.answer("Что-то пошло не так")
 
 
