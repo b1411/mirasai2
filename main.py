@@ -43,7 +43,7 @@ async def echo(message: Message):
 
     try:
         res = requests.post(
-        'https://jasik.alwaysdata.net/mirasaitg', json=req)
+        'https://jasik.alwaysdata.net/mirasaitg', data=json.dumps(req))
     
         data = res.json()
 
