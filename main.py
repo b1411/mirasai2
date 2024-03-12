@@ -35,15 +35,12 @@ async def end(message: Message):
 
 @dp.message()
 async def echo(message: Message):
-
-    req = {
-        "message": message.text,
-        "contactId": message.chat.id
-    }
-
     try:
         res = requests.post(
-        'https://jasik.alwaysdata.net/mirasaitg', data=json.dumps(req))
+        'https://jasik.alwaysdata.net/mirasaitg', data=json.dumps({
+            "message": message.text,
+            "contactId": message.chat.id
+        }), headers={"Content-Type": "application/json"})
     
         data = res.json()
 
