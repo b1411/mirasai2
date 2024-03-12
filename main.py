@@ -42,7 +42,11 @@ async def echo(message: Message):
             "contactId": message.chat.id
         }), headers={"Content-Type": "application/json"})
     
-        data = res.json()
+        if res.status_code == 200:
+            data = res.json()
+        
+        else:
+            raise Exception(f"Status code: {res.status_code}, response: {res.text}")
 
         await message.answer(data['message'])
 
