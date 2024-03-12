@@ -40,7 +40,7 @@ async def echo(message: Message):
         'https://jasik.alwaysdata.net/mirasaitg', data=json.dumps({
             "message": message.text,
             "contactId": str(message.chat.id)
-        }))
+        }), headers={"Content-Type": "application/json"})
     
         if res.status_code == 200:
             data = res.json()
