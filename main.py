@@ -40,7 +40,7 @@ async def echo(message: Message):
         'https://jasik.alwaysdata.net/mirasaitg', data=json.dumps({
             "message": message.text,
             "contactId": message.chat.id
-        }), headers={"Content-Type": "application/json"})
+        }))
     
         if res.status_code == 200:
             data = res.json()
@@ -51,7 +51,7 @@ async def echo(message: Message):
         await message.answer(data['message'])
 
     except Exception as e:
-        logging.error(e, exc_info=True, stack_info=True, extra={'message': message})
+        logging.error(e)
         await message.answer("Что-то пошло не так")
 
 
