@@ -23,7 +23,7 @@ async def start(message: Message):
 @dp.message(Command("end"))
 async def end(message: Message):
     res = requests.post('https://jasik.alwaysdata.net/clear-ig-session',
-                        json={"contactId": message.from_user.username})
+                        json={"contactId": f'{str(message.chat.id)}miras'})
     
     if res.status_code == 200:
         await message.answer("Ваша сессия прервана, пожалуйста начните сначала")
