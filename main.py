@@ -24,29 +24,29 @@ async def start(message: Message):
 async def end(message: Message):
     res = requests.post('https://jasik.alwaysdata.net/clear-ig-session',
                         json={"contactId": f'{str(message.chat.id)}miras'})
-    
+
     if res.status_code == 200:
         await message.answer("Ваша сессия прервана, пожалуйста начните сначала")
 
-    else: 
+    else:
         await message.answer("Что-то пошло не так")
-    
 
 
 @dp.message()
 async def echo(message: Message):
     try:
         res = requests.post(
-        'https://jasik.alwaysdata.net/mirasaitg', data=json.dumps({
-            "message": message.text,
-            "contactId": f'{str(message.chat.id)}miras'
-        }), headers={"Content-Type": "application/json"})
-    
+            'https://jasik.alwaysdata.net/mirasaitg', data=json.dumps({
+                "message": message.text,
+                "contactId": f'{str(message.chat.id)}miras'
+            }), headers={"Content-Type": "application/json"})
+
         if res.status_code == 200:
             data = res.json()
-        
+
         else:
-            raise Exception(f"Status code: {res.status_code}, response: {res.text}")
+            raise Exception(
+                f"Status code: {res.status_code}, response: {res.text}")
 
         await message.answer(data['message'])
 
@@ -57,7 +57,7 @@ async def echo(message: Message):
 
 async def main():
     bot = Bot(token="7156102554:AAF-37RMlJjv_EGPVJrt8OPxo13ZLvXCFFM",
-              parse_mode=ParseMode.HTML)
+              parse_mode=ParseMode.MARKDOWN)
     await dp.start_polling(bot)
 
 
